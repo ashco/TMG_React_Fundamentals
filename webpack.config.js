@@ -1,7 +1,17 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+// FOR PRODUCTION
+var webpack = require('webpack');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-module.exports = {
+
+// FOR DEVELOPMENT
+// module.exports = {
+
+
+// FOR PRODUCTION
+
+var config = {
   entry: './app/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -24,3 +34,17 @@ module.exports = {
   ],
   mode: "development"
 };
+
+// FOR PRODUCTION
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      }
+    }),
+    new UglifyJsPlugin()
+  );
+}
+
+module.exports = config;
