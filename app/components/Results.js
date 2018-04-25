@@ -1,14 +1,12 @@
-var React = require('react');
-var queryString = require('query-string');
-var api = require('../utils/api');
-var Link = require('react-router-dom').Link;
-var PropTypes = require('prop-types');
-var PlayerPreview = require('./PlayerPreview');
-var Loading = require('./Loading');
+import React from 'react';
+import queryString from 'query-string';
+import { battle } from '../utils/api';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import PlayerPreview from './PlayerPreview';
+import Loading from './Loading';
 
-function Profile (props) {
-  var info = props.info;
-
+function Profile ({ info }) {
   return (
     <PlayerPreview avatar={info.avatar_url} username={info.login}>
       <ul className='space-list-items'>
@@ -29,12 +27,12 @@ Profile.propTypes = {
 }
 
 
-function Player (props) {
+function Player ({ label, score, profile }) {
   return (
     <div>
-      <h1 className="header">{props.label}</h1>
-      <h3 style={{textAlign: 'center'}}>Score: {props.score}</h3>
-      <Profile info={props.profile} />
+      <h1 className="header">{label}</h1>
+      <h3 style={{textAlign: 'center'}}>Score: {score}</h3>
+      <Profile info={profile} />
     </div>
   )
 }
@@ -47,53 +45,49 @@ Player.propTypes = {
 
 
 class Results extends React.Component {
-  constructor (props) {
-    super(props);
-
-    this.state = {
-      winner: null,
-      loser: null,
-      error: null,
-      loading: true
-    }
+  state = {
+    winner: null,
+    loser: null,
+    error: null,
+    loading: true
   }
 
+
+  // constructor (props) {
+  //   super(props);
+  //   this.state = {
+  //     winner: null,
+  //     loser: null,
+  //     error: null,
+  //     loading: true
+  //   }
+  // }
+
   componentDidMount () {
-    var players = queryString.parse(this.props.location.search);
+    const { playerOneName, playerTwoName } = queryString.parse(this.props.location.search);
 
-    // console.log(this);
-
-    api.battle([
-      players.playerOneName,
-      players.playerTwoName
-    ]).then(function (results) {
+    battle([
+      playerOneName,
+      playerTwoName
+    ]).then((results) => {
       if (results === null) {
-        return this.setState(function () {
-          return {
-            error: 'Looks like there was an error. Check that both users exist on Github.',
-            loading: false,
-          }
-        })
+        return this.setState(() => ({
+          error: 'Looks like there was an error. Check that both users exist on Github.',
+          loading: false,
+        }))
       }
 
-      // console.log(this);
-
-      this.setState(function () {
-        return {
-          error: null,
-          winner: results[0],
-          loser: results[1],
-          loading: false
-        }
-      })
-    }.bind(this));
+      this.setState(() => ({
+        error: null,
+        winner: results[0],
+        loser: results[1],
+        loading: false
+      }))
+    });
   }
 
   render () {
-    var winner = this.state.winner;
-    var loser = this.state.loser;
-    var error = this.state.error;
-    var loading = this.state.loading;
+    const {winner, loser, error, loading} = this.state;
 
     if (loading === true) {
       return <Loading />
@@ -108,7 +102,6 @@ class Results extends React.Component {
       )
     }
     return (
-      // <div>{JSON.stringify(this.state, null, 2)}</div>
       <div className="row">
         <Player
           label='Winner'
@@ -125,4 +118,4 @@ class Results extends React.Component {
   }
 }
 
-module.exports = Results;
+export default Results;

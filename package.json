@@ -14,12 +14,17 @@
     "presets": [
       "env",
       "react"
+    ],
+    "plugins": [
+      "transform-class-properties"
     ]
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "npm": "^5.8.0",
     "prop-types": "^15.6.1",
     "query-string": "^6.0.0",

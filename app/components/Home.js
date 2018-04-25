@@ -1,5 +1,7 @@
-var React = require('react');
-var Link = require('react-router-dom').Link;
+import React from 'react';
+import { Link } from 'react-router-dom';
+// var React = require('react');
+// var Link = require('react-router-dom').Link;
 
 class Home extends React.Component {
   render () {
@@ -14,4 +16,5 @@ class Home extends React.Component {
   }
 }
 
-module.exports = Home;
+// module.exports = Home;
+export default Home
